@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "282479979147",
+    "project_id": "psyagen-f459e",
+    "storage_bucket": "psyagen-f459e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:282479979147:android:f1d77805ae9952cf4d428e",
+        "android_client_info": {
+          "package_name": "com.example.psyagend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZokPxElTiP3FjqBrdYIkkfCQNH70u1kc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
