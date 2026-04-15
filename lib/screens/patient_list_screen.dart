@@ -116,7 +116,7 @@ class _PatientListScreenState extends State<PatientListScreen> {
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 4.0),
-                            child: Text('${p.age} años • ${p.generalReason}', style: TextStyle(color: darkTeal.withOpacity(0.7))),
+                            child: Text('${p.age} años • ${provider.getReasonNameById(p.generalReason)}', style: TextStyle(color: darkTeal.withOpacity(0.7))),
                           ),
                           trailing: Icon(Icons.arrow_forward_ios, size: 16, color: darkTeal.withOpacity(0.4)),
                           onTap: () {

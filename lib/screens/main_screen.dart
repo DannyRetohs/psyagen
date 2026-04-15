@@ -5,6 +5,7 @@ import 'patient_list_screen.dart';
 import 'monthly_report_screen.dart';
 import '../widgets/liquid_background.dart';
 import '../widgets/glass_container.dart';
+import '../services/auth_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -27,6 +28,34 @@ class _MainScreenState extends State<MainScreen> {
     return LiquidBackground(
       child: Scaffold(
         backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          actions: [
+            IconButton(
+              tooltip: 'Cerrar sesión',
+              icon: const Icon(Icons.logout_rounded, color: Color(0xFF315A68)),
+              onPressed: () async {
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('Cerrar sesión'),
+                    content: const Text('¿Estás seguro que quieres salir?'),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('Cancelar')),
+                      TextButton(
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: const Text('Salir', style: TextStyle(color: Colors.redAccent)),
+                      ),
+                    ],
+                  ),
+                );
+                if (confirm == true) await AuthService().signOut();
+              },
+            ),
+          ],
+        ),
         body: IndexedStack(
           index: _currentIndex,
           children: _pages,

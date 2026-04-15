@@ -23,7 +23,7 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
   
   int _age = 5;
   String _gender = 'Femenino';
-  String _reason = '';
+  String _reasonId = '';
   List<PatientDocument> _documents = [];
   
   bool _isEditing = false;
@@ -37,9 +37,9 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       provider = Provider.of<AgendaProvider>(context, listen: false);
-      if (_reason.isEmpty && provider.reasons.isNotEmpty) {
+      if (_reasonId.isEmpty && provider.reasons.isNotEmpty) {
         setState(() {
-          _reason = provider.reasons.first;
+          _reasonId = provider.reasons.first.id;
         });
       }
       
@@ -52,23 +52,29 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
           _gender = patient.gender;
           _documents = List.from(patient.documents);
           
-          if (!provider.reasons.contains(patient.generalReason)) {
-             provider.addReason(patient.generalReason);
-          }
           setState(() {
-            _reason = patient.generalReason;
+            _reasonId = patient.generalReason;
           });
         }
       }
     });
   }
 
-  void _save() {
+  Future<void> _save() async {
     if (_formKey.currentState!.validate()) {
-      if (_reason == 'Otro') {
+      bool isOtro = false;
+      try {
+        isOtro = provider.reasons.firstWhere((r) => r.id == _reasonId).name == 'Otro';
+      } catch (_) {}
+
+      String finalReasonId = _reasonId;
+
+      if (isOtro) {
         if (_customReasonController.text.isNotEmpty) {
-          provider.addReason(_customReasonController.text);
-          _reason = _customReasonController.text;
+          final returnedId = await provider.addReason(_customReasonController.text);
+          if (returnedId != null) {
+            finalReasonId = returnedId;
+          }
         }
       }
 
@@ -78,7 +84,7 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
           p.name = _nameController.text;
           p.age = _age;
           p.gender = _gender;
-          p.generalReason = _reason;
+          p.generalReason = finalReasonId;
           p.documents = _documents;
           provider.updatePatient(p);
         }
@@ -88,12 +94,21 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
           name: _nameController.text,
           age: _age,
           gender: _gender,
-          generalReason: _reason,
+          generalReason: finalReasonId,
           documents: _documents,
         );
         provider.addPatient(newPatient);
       }
-      Navigator.pop(context);
+      if (mounted) Navigator.pop(context);
+    }
+  }
+
+  bool get _isOtroSelected {
+    if (_reasonId.isEmpty) return false;
+    try {
+      return provider.reasons.firstWhere((r) => r.id == _reasonId).name == 'Otro';
+    } catch (_) {
+      return false;
     }
   }
 
@@ -158,19 +173,19 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                   ),
                   const SizedBox(height: 20),
                   DropdownButtonFormField<String>(
-                    value: _reason.isEmpty ? null : _reason,
+                    value: _reasonId.isEmpty ? null : _reasonId,
                     dropdownColor: Colors.white,
                     icon: Icon(Icons.keyboard_arrow_down, color: sandPeach),
                     decoration: InputDecoration(
                       labelText: 'Motivo General de Consulta',
                       labelStyle: TextStyle(color: darkTeal.withOpacity(0.5)),
                     ),
-                    items: provider.reasons.map((r) => DropdownMenuItem(value: r, child: Text(r, style: TextStyle(color: darkTeal)))).toList(),
+                    items: provider.reasons.map((r) => DropdownMenuItem(value: r.id, child: Text(r.name, style: TextStyle(color: darkTeal)))).toList(),
                     onChanged: (val) {
-                      if (val != null) setState(() => _reason = val);
+                      if (val != null) setState(() => _reasonId = val);
                     },
                   ),
-                  if (_reason == 'Otro') ...[
+                  if (_isOtroSelected) ...[
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _customReasonController,

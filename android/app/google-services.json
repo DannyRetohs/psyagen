@@ -12,7 +12,20 @@
           "package_name": "com.example.psyagend"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "282479979147-d6s0gjg5ikrks5prvalp1qvmalk8if2s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.psyagend",
+            "certificate_hash": "3ec354cd6b78d84e01739ccd42e6eb5829cfaeaa"
+          }
+        },
+        {
+          "client_id": "282479979147-p92amendsaif7vd640ogv8q7npm51uu1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBZokPxElTiP3FjqBrdYIkkfCQNH70u1kc"
@@ -20,7 +33,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "282479979147-p92amendsaif7vd640ogv8q7npm51uu1.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "282479979147-mklqq55m82b0gnpbgk0joarr4vuhnf8b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.psyagend"
+              }
+            }
+          ]
         }
       }
     }

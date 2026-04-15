@@ -10,6 +10,7 @@ import 'appointment_form_screen.dart';
 import 'appointment_detail_screen.dart';
 import 'event_form_screen.dart';
 import 'psychoeducation_form_screen.dart';
+import '../services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -672,32 +673,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         );
                       },
                     ),
-                    ListTile(
-                      leading: CircleAvatar(
-                        backgroundColor: const Color(0xFF315A68).withOpacity(0.15),
-                        child: const Icon(Icons.school, color: Color(0xFF315A68)),
-                      ),
-                      title: Text(
-                        'Psicoeducación',
-                        style: TextStyle(
-                          color: darkTeal,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      subtitle: const Text(
-                        'Registrar sesión educativa con paciente',
-                        style: TextStyle(color: Colors.black54),
-                      ),
-                      onTap: () {
-                        Navigator.pop(ctx);
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const PsychoeducationFormScreen(),
-                          ),
-                        );
-                      },
-                    ),
+
                     const SizedBox(height: 16),
                   ],
                 ),
@@ -721,47 +697,79 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildHeader(BuildContext context) {
     final todayStr = DateFormat('EEEE, d MMMM', 'es').format(DateTime.now());
+    final user = AuthService().currentUser;
+    final userName = (user?.displayName != null && user!.displayName!.isNotEmpty) 
+        ? user.displayName! 
+        : 'Psicóloga';
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Hola\nPsic. Sarai',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: darkTeal,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Hola\n$userName',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: darkTeal,
+                  fontSize: 28,
+                  height: 1.1,
+                ),
               ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              todayStr[0].toUpperCase() + todayStr.substring(1),
-              style: const TextStyle(color: Colors.black54, fontSize: 16),
-            ),
-          ],
-        ),
-        ShaderMask(
-          shaderCallback: (Rect bounds) {
-            return LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [Colors.black, Colors.black.withOpacity(0.0)],
-              stops: const [
-                0.75,
-                1.0,
-              ], // El desvanecido ocurre en el último 25% de la imagen
-            ).createShader(bounds);
-          },
-          blendMode: BlendMode.dstIn,
-          child: Image.asset(
-            'assets/images/sarahi_nobg.png',
-            fit: BoxFit.contain,
-            width: 140,
-            alignment: Alignment.topRight,
+              const SizedBox(height: 8),
+              Text(
+                todayStr[0].toUpperCase() + todayStr.substring(1),
+                style: const TextStyle(color: Colors.black54, fontSize: 16),
+              ),
+            ],
           ),
         ),
+        const SizedBox(width: 16),
+        if (user?.photoURL != null)
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF315A68).withOpacity(0.2),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                )
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 45,
+              backgroundImage: NetworkImage(user!.photoURL!),
+              backgroundColor: Colors.transparent,
+            ),
+          )
+        else
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF315A68).withOpacity(0.2),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                )
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 45,
+              backgroundColor: const Color(0xFF315A68).withOpacity(0.1),
+              child: Text(
+                userName.substring(0, 1).toUpperCase(),
+                style: const TextStyle(
+                  fontSize: 36, 
+                  color: Color(0xFF315A68), 
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }

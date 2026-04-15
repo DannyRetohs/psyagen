@@ -146,7 +146,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text('Motivo', style: TextStyle(fontSize: 12, color: darkTeal.withOpacity(0.5))),
-                              Text(patient?.generalReason ?? 'No especificado', style: TextStyle(fontWeight: FontWeight.w600, color: darkTeal)),
+                              Text(patient != null ? provider.getReasonNameById(patient.generalReason) : 'No especificado', style: TextStyle(fontWeight: FontWeight.w600, color: darkTeal)),
                             ],
                           ),
                         ),

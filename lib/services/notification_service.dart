@@ -45,11 +45,12 @@ class NotificationService {
     );
 
     if (Platform.isAndroid) {
-      await _flutterLocalNotificationsPlugin
+      final androidPlugin = _flutterLocalNotificationsPlugin
           .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin
-          >()
-          ?.requestNotificationsPermission();
+          >();
+      await androidPlugin?.requestNotificationsPermission();
+      await androidPlugin?.requestExactAlarmsPermission();
     }
 
     // Iniciar configuración de Firebase Messaging

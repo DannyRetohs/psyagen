@@ -83,7 +83,7 @@ class PatientDetailScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Center(
-                  child: Text('${patient.age} años • ${patient.gender} • ${patient.generalReason}', 
+                  child: Text('${patient.age} años • ${patient.gender} • ${provider.getReasonNameById(patient.generalReason)}', 
                     style: TextStyle(color: darkTeal.withOpacity(0.7), fontSize: 16)
                   ),
                 ),

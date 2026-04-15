@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../providers/agenda_provider.dart';
 import '../models/patient.dart';
 import '../models/appointment.dart';
 import '../models/clinical_report.dart';
@@ -11,6 +13,7 @@ import '../widgets/custom_alert_dialog.dart';
 class DocumentExporter {
   static Future<void> exportReportToWord(BuildContext context, Patient patient, Appointment appointment, ClinicalReport report) async {
     try {
+      final provider = Provider.of<AgendaProvider>(context, listen: false);
       final String dateStr = DateFormat('dd \'de\' MMMM \'de\' yyyy, h:mm a', 'es_ES').format(appointment.scheduledDate);
       
       // Construir el HTML estricto para que Word lo interprete como MS Word Document
@@ -39,7 +42,7 @@ xmlns="http://www.w3.org/TR/REC-html40">
   <p><span class="field-title">Nombre del Paciente:</span> ${patient.name}</p>
   <p><span class="field-title">Edad del Paciente:</span> ${patient.age} años</p>
   <p><span class="field-title">Género:</span> ${patient.gender}</p>
-  <p><span class="field-title">Tema / Motivo General:</span> ${patient.generalReason}</p>
+  <p><span class="field-title">Tema / Motivo General:</span> ${provider.getReasonNameById(patient.generalReason)}</p>
   <p><span class="field-title">Psicólogo Tratante:</span> [Su Nombre / Firma Aquí]</p>
 </div>
 

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'providers/agenda_provider.dart';
-import 'screens/home_screen.dart';
-import 'screens/main_screen.dart';
-import 'services/notification_service.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'providers/agenda_provider.dart';
+import 'screens/main_screen.dart';
+import 'screens/login_screen.dart';
+import 'services/auth_service.dart';
+import 'services/notification_service.dart';
 import 'firebase_options.dart';
 
 @pragma('vm:entry-point')
@@ -131,7 +133,23 @@ class PsicoAgendaApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MainScreen(),
+      home: StreamBuilder<User?>(
+        stream: AuthService().authStateChanges,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Scaffold(
+              backgroundColor: Color(0xFFE8F2F5),
+              body: Center(
+                child: CircularProgressIndicator(color: Color(0xFF315A68)),
+              ),
+            );
+          }
+          if (snapshot.hasData) {
+            return const MainScreen(); // Sesión activa → app
+          }
+          return const LoginScreen(); // Sin sesión → login
+        },
+      ),
     );
   }
 }
