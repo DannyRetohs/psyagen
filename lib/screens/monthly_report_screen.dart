@@ -11,8 +11,8 @@ class MonthlyReportScreen extends StatefulWidget {
 }
 
 class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
-  final Color deepPurple = const Color(0xFF4A148C);
-  final Color pastelPurple = const Color(0xFFCE93D8);
+  final Color darkTeal = const Color(0xFF1D3038);
+  final Color sandPeach = const Color(0xFF315A68);
 
   int _selectedMonth = DateTime.now().month;
   int _selectedYear = DateTime.now().year;
@@ -97,7 +97,7 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text('Reporte Mensual', style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold)),
+        title: Text('Reporte Mensual', style: TextStyle(color: darkTeal, fontWeight: FontWeight.bold)),
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -117,11 +117,11 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
                           value: _selectedMonth,
                           isExpanded: true,
                           dropdownColor: Colors.white,
-                          icon: Icon(Icons.arrow_drop_down, color: deepPurple),
+                          icon: Icon(Icons.arrow_drop_down, color: darkTeal),
                           items: List.generate(12, (index) {
                             return DropdownMenuItem(
                               value: index + 1,
-                              child: Text(_months[index], style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold)),
+                              child: Text(_months[index], style: TextStyle(color: darkTeal, fontWeight: FontWeight.bold)),
                             );
                           }),
                           onChanged: (val) {
@@ -141,11 +141,11 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
                           value: _selectedYear,
                           isExpanded: true,
                           dropdownColor: Colors.white,
-                          icon: Icon(Icons.arrow_drop_down, color: deepPurple),
+                          icon: Icon(Icons.arrow_drop_down, color: darkTeal),
                           items: years.map((y) {
                             return DropdownMenuItem(
                               value: y,
-                              child: Text('$y', style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold)),
+                              child: Text('$y', style: TextStyle(color: darkTeal, fontWeight: FontWeight.bold)),
                             );
                           }).toList(),
                           onChanged: (val) {
@@ -164,13 +164,13 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
-                    // Icon(Icons.assignment_turned_in, color: pastelPurple, size: 40),
+                    // Icon(Icons.assignment_turned_in, color: sandPeach, size: 40),
                     // const SizedBox(height: 16),
                     Text(
                       reportText,
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        color: deepPurple,
+                        color: darkTeal,
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                         height: 1.4,
@@ -182,19 +182,19 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
               const SizedBox(height: 24),
 
               // Estadísticas Generales de Citas
-              Text('Citas del Mes', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: deepPurple)),
+              Text('Citas del Mes', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkTeal)),
               const SizedBox(height: 12),
               Row(
                 children: [
                   Expanded(child: _statCard('Programadas', scheduledCount.toString(), Colors.blueAccent, Icons.calendar_today)),
                   const SizedBox(width: 12),
-                  Expanded(child: _statCard('Realizadas', realizedCount.toString(), pastelPurple, Icons.check_circle_outline)),
+                  Expanded(child: _statCard('Realizadas', realizedCount.toString(), sandPeach, Icons.check_circle_outline)),
                 ],
               ),
               const SizedBox(height: 24),
 
               // Desglose de NNA
-              Text('Desglose de Población ($totalNNA NNA)', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: deepPurple)),
+              Text('Desglose de Población ($totalNNA NNA)', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkTeal)),
               const SizedBox(height: 12),
               
               // Género
@@ -205,18 +205,18 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.people, color: pastelPurple),
+                        Icon(Icons.people, color: sandPeach),
                         const SizedBox(width: 8),
-                        Text('Por Género', style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text('Por Género', style: TextStyle(color: darkTeal, fontWeight: FontWeight.bold, fontSize: 16)),
                       ],
                     ),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _infoBlock('Mujeres', mujeres.toString(), const Color(0xFFF48FB1)),
+                        _infoBlock('Mujeres', mujeres.toString(), const Color(0xFFE8BD8A)),
                         _infoBlock('Hombres', hombres.toString(), Colors.blueAccent.shade100),
-                        _infoBlock('Total', totalNNA.toString(), deepPurple),
+                        _infoBlock('Total', totalNNA.toString(), darkTeal),
                       ],
                     ),
                   ],
@@ -232,17 +232,17 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
                   children: [
                     Row(
                       children: [
-                        Icon(Icons.cake, color: pastelPurple),
+                        Icon(Icons.cake, color: sandPeach),
                         const SizedBox(width: 8),
-                        Text('Rango de Edades', style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold, fontSize: 16)),
+                        Text('Rango de Edades', style: TextStyle(color: darkTeal, fontWeight: FontWeight.bold, fontSize: 16)),
                       ],
                     ),
                     const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _infoBlock('5 - 11 años', age5to11.toString(), pastelPurple),
-                        _infoBlock('12 - 17 años', age12to17.toString(), pastelPurple.withOpacity(0.8)),
+                        _infoBlock('5 - 11 años', age5to11.toString(), sandPeach),
+                        _infoBlock('12 - 17 años', age12to17.toString(), sandPeach.withOpacity(0.8)),
                       ],
                     ),
                   ],
@@ -251,7 +251,7 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
               const SizedBox(height: 24),
 
               // Desglose Diario en Tabla
-              Text('Actividad Diaria Completa', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: deepPurple)),
+              Text('Actividad Diaria Completa', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkTeal)),
               const SizedBox(height: 12),
               _buildActivityTable(daysInMonth, dailyStats),
 
@@ -270,9 +270,9 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
         children: [
           Icon(icon, color: iconColor, size: 32),
           const SizedBox(height: 12),
-          Text(count, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32, color: deepPurple)),
+          Text(count, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32, color: darkTeal)),
           const SizedBox(height: 4),
-          Text(title, style: TextStyle(fontSize: 14, color: deepPurple.withOpacity(0.7), fontWeight: FontWeight.bold)),
+          Text(title, style: TextStyle(fontSize: 14, color: darkTeal.withOpacity(0.7), fontWeight: FontWeight.bold)),
         ],
       ),
     );
@@ -283,7 +283,7 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
       children: [
         Text(value, style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: textColor)),
         const SizedBox(height: 4),
-        Text(label, style: TextStyle(fontSize: 14, color: deepPurple.withOpacity(0.7), fontWeight: FontWeight.bold)),
+        Text(label, style: TextStyle(fontSize: 14, color: darkTeal.withOpacity(0.7), fontWeight: FontWeight.bold)),
       ],
     );
   }
@@ -308,24 +308,24 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
        sumHombres += hombres;
 
        rows.add(DataRow(cells: [
-         DataCell(Text(day.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple))),
-         DataCell(Text(prog.toString(), style: TextStyle(color: deepPurple))),
-         DataCell(Text(real.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: pastelPurple))),
-         DataCell(Text(mujeres.toString(), style: TextStyle(color: const Color(0xFFF48FB1)))),
+         DataCell(Text(day.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal))),
+         DataCell(Text(prog.toString(), style: TextStyle(color: darkTeal))),
+         DataCell(Text(real.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: sandPeach))),
+         DataCell(Text(mujeres.toString(), style: TextStyle(color: const Color(0xFFE8BD8A)))),
          DataCell(Text(hombres.toString(), style: TextStyle(color: Colors.blueAccent))),
-         DataCell(Text(real.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple))),
+         DataCell(Text(real.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal))),
        ]));
     }
 
     // Fila de Totales
     rows.add(DataRow(
       cells: [
-         DataCell(Text('TOTAL', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple, fontSize: 16))),
-         DataCell(Text(sumProg.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple, fontSize: 16))),
-         DataCell(Text(sumReal.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple, fontSize: 16))),
-         DataCell(Text(sumMujeres.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple, fontSize: 16))),
-         DataCell(Text(sumHombres.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple, fontSize: 16))),
-         DataCell(Text(sumReal.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple, fontSize: 16))),
+         DataCell(Text('TOTAL', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal, fontSize: 16))),
+         DataCell(Text(sumProg.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal, fontSize: 16))),
+         DataCell(Text(sumReal.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal, fontSize: 16))),
+         DataCell(Text(sumMujeres.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal, fontSize: 16))),
+         DataCell(Text(sumHombres.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal, fontSize: 16))),
+         DataCell(Text(sumReal.toString(), style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal, fontSize: 16))),
       ]
     ));
 
@@ -334,7 +334,7 @@ class _MonthlyReportScreenState extends State<MonthlyReportScreen> {
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: DataTable(
-          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: deepPurple),
+          headingTextStyle: TextStyle(fontWeight: FontWeight.bold, color: darkTeal),
           columnSpacing: 24,
           columns: const [
             DataColumn(label: Text('Día')),

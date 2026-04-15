@@ -14,7 +14,7 @@ class PatientListScreen extends StatefulWidget {
 
 class _PatientListScreenState extends State<PatientListScreen> {
   String _searchQuery = '';
-  final Color deepPurple = const Color(0xFF4A148C);
+  final Color darkTeal = const Color(0xFF1D3038);
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +28,18 @@ class _PatientListScreenState extends State<PatientListScreen> {
     return Scaffold(
       backgroundColor: Colors.transparent, // Background transparent for liquid
       appBar: AppBar(
-        title: Text('Directorio de Pacientes', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+        title: Text('Directorio de Pacientes', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
       ),
       body: Column(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
             child: TextField(
-              style: TextStyle(color: deepPurple),
+              style: TextStyle(color: darkTeal),
               decoration: InputDecoration(
                 hintText: 'Buscar paciente...',
-                hintStyle: TextStyle(color: deepPurple.withOpacity(0.5)),
-                prefixIcon: Icon(Icons.search, color: deepPurple),
+                hintStyle: TextStyle(color: darkTeal.withOpacity(0.5)),
+                prefixIcon: Icon(Icons.search, color: darkTeal),
                 contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
               ),
               onChanged: (value) {
@@ -51,7 +51,7 @@ class _PatientListScreenState extends State<PatientListScreen> {
           ),
           Expanded(
             child: filteredPatients.isEmpty
-                ? Center(child: Text('No hay pacientes que coincidan.', style: TextStyle(color: deepPurple.withOpacity(0.7))))
+                ? Center(child: Text('No hay pacientes que coincidan.', style: TextStyle(color: darkTeal.withOpacity(0.7))))
                 : ListView.builder(
                     padding: const EdgeInsets.all(16.0),
                     itemCount: filteredPatients.length,
@@ -67,11 +67,11 @@ class _PatientListScreenState extends State<PatientListScreen> {
                               CircleAvatar(
                                 radius: 24,
                                 backgroundColor: p.isActive 
-                                  ? const Color(0xFFCE93D8).withOpacity(0.3)
+                                  ? const Color(0xFF315A68).withOpacity(0.3)
                                   : Colors.white.withOpacity(0.5),
                                 child: Text(p.name.substring(0, 1).toUpperCase(), 
                                   style: TextStyle(
-                                    color: p.isActive ? const Color(0xFFCE93D8) : deepPurple.withOpacity(0.5), 
+                                    color: p.isActive ? const Color(0xFF315A68) : darkTeal.withOpacity(0.5), 
                                     fontWeight: FontWeight.bold, fontSize: 18)
                                 ),
                               ),
@@ -97,7 +97,7 @@ class _PatientListScreenState extends State<PatientListScreen> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold, fontSize: 16,
                                     decoration: p.isActive ? null : TextDecoration.lineThrough,
-                                    color: p.isActive ? deepPurple : deepPurple.withOpacity(0.5),
+                                    color: p.isActive ? darkTeal : darkTeal.withOpacity(0.5),
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -116,9 +116,9 @@ class _PatientListScreenState extends State<PatientListScreen> {
                           ),
                           subtitle: Padding(
                             padding: const EdgeInsets.only(top: 4.0),
-                            child: Text('${p.age} años • ${p.generalReason}', style: TextStyle(color: deepPurple.withOpacity(0.7))),
+                            child: Text('${p.age} años • ${p.generalReason}', style: TextStyle(color: darkTeal.withOpacity(0.7))),
                           ),
-                          trailing: Icon(Icons.arrow_forward_ios, size: 16, color: deepPurple.withOpacity(0.4)),
+                          trailing: Icon(Icons.arrow_forward_ios, size: 16, color: darkTeal.withOpacity(0.4)),
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(
                               builder: (_) => PatientDetailScreen(patientId: p.id)

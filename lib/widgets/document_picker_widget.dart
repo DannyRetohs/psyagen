@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/patient_document.dart';
@@ -20,8 +21,8 @@ class DocumentPickerWidget extends StatefulWidget {
 }
 
 class _DocumentPickerWidgetState extends State<DocumentPickerWidget> {
-  final Color deepPurple = const Color(0xFF4A148C);
-  final Color pastelPurple = const Color(0xFFCE93D8);
+  final Color darkTeal = const Color(0xFF1D3038);
+  final Color sandPeach = const Color(0xFF315A68);
 
   Future<void> _pickImage(ImageSource source) async {
     if (widget.documents.length >= 3) return;
@@ -43,19 +44,19 @@ class _DocumentPickerWidgetState extends State<DocumentPickerWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('Añadir Documento', style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold, fontSize: 18)),
+            Text('Añadir Documento', style: TextStyle(color: darkTeal, fontWeight: FontWeight.bold, fontSize: 18)),
             const SizedBox(height: 20),
             ListTile(
-              leading: Icon(Icons.camera_alt, color: pastelPurple),
-              title: Text('Tomar Foto', style: TextStyle(color: deepPurple)),
+              leading: Icon(Icons.camera_alt, color: sandPeach),
+              title: Text('Tomar Foto', style: TextStyle(color: darkTeal)),
               onTap: () {
                 Navigator.pop(ctx);
                 _pickImage(ImageSource.camera);
               },
             ),
             ListTile(
-              leading: Icon(Icons.photo_library, color: pastelPurple),
-              title: Text('Elegir de Galería', style: TextStyle(color: deepPurple)),
+              leading: Icon(Icons.photo_library, color: sandPeach),
+              title: Text('Elegir de Galería', style: TextStyle(color: darkTeal)),
               onTap: () {
                 Navigator.pop(ctx);
                 _pickImage(ImageSource.gallery);
@@ -72,11 +73,11 @@ class _DocumentPickerWidgetState extends State<DocumentPickerWidget> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text('Descripción / Notas', style: TextStyle(color: deepPurple)),
+        title: Text('Descripción / Notas', style: TextStyle(color: darkTeal)),
         content: TextField(
           controller: controller,
           maxLines: 3,
-          style: TextStyle(color: deepPurple),
+          style: TextStyle(color: darkTeal),
           decoration: InputDecoration(
             hintText: 'Ej. Receta médica, análisis...',
           ),
@@ -102,6 +103,34 @@ class _DocumentPickerWidgetState extends State<DocumentPickerWidget> {
     widget.onChanged(newList);
   }
 
+  Widget _buildImage(String path, {BoxFit fit = BoxFit.cover, double? width, double? height}) {
+    if (path.startsWith('base64,')) {
+      final base64String = path.substring(7);
+      return Image.memory(
+        base64Decode(base64String),
+        fit: fit,
+        width: width,
+        height: height,
+        errorBuilder: (_, __, ___) => _errorIcon(width, height),
+      );
+    } else {
+      return Image.file(
+        File(path),
+        fit: fit,
+        width: width,
+        height: height,
+        errorBuilder: (_, __, ___) => _errorIcon(width, height),
+      );
+    }
+  }
+
+  Widget _errorIcon(double? width, double? height) {
+    return Container(
+      width: width, height: height, color: Colors.grey.withOpacity(0.3),
+      child: const Icon(Icons.broken_image),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -110,17 +139,17 @@ class _DocumentPickerWidgetState extends State<DocumentPickerWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Documentos (${widget.documents.length}/3)', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+            Text('Documentos (${widget.documents.length}/3)', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
             if (widget.documents.length < 3)
               IconButton(
-                icon: Icon(Icons.add_a_photo, color: pastelPurple),
+                icon: Icon(Icons.add_a_photo, color: sandPeach),
                 onPressed: _showAddDialog,
               )
           ],
         ),
         const SizedBox(height: 12),
         if (widget.documents.isEmpty)
-          Text('Sin documentos adjuntos', style: TextStyle(color: deepPurple.withOpacity(0.5))),
+          Text('Sin documentos adjuntos', style: TextStyle(color: darkTeal.withOpacity(0.5))),
         if (widget.documents.isNotEmpty)
           ListView.builder(
             shrinkWrap: true,
@@ -147,7 +176,7 @@ class _DocumentPickerWidgetState extends State<DocumentPickerWidget> {
                             child: Stack(
                               children: [
                                 InteractiveViewer(
-                                  child: Image.file(File(doc.path), fit: BoxFit.contain),
+                                  child: _buildImage(doc.path, fit: BoxFit.contain),
                                 ),
                                 Positioned(
                                   top: 10,
@@ -164,15 +193,11 @@ class _DocumentPickerWidgetState extends State<DocumentPickerWidget> {
                       },
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.file(
-                          File(doc.path),
+                        child: _buildImage(
+                          doc.path,
                           width: 60,
                           height: 60,
                           fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            width: 60, height: 60, color: Colors.grey.withOpacity(0.3),
-                            child: const Icon(Icons.broken_image),
-                          ),
                         ),
                       ),
                     ),
@@ -181,10 +206,10 @@ class _DocumentPickerWidgetState extends State<DocumentPickerWidget> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Documento ${index + 1}', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+                          Text('Documento ${index + 1}', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
                           Text(
                             doc.description.isEmpty ? 'Sin notas' : doc.description,
-                            style: TextStyle(fontSize: 12, color: deepPurple.withOpacity(0.7)),
+                            style: TextStyle(fontSize: 12, color: darkTeal.withOpacity(0.7)),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           )

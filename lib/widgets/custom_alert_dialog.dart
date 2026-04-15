@@ -10,7 +10,7 @@ void showCustomAlert(BuildContext context, String title, String message, {bool i
         children: [
           Icon(
              isError ? Icons.warning_amber_rounded : Icons.info_outline,
-            color: isError ? Colors.redAccent : const Color(0xFF4A148C),
+            color: isError ? Colors.redAccent : const Color(0xFF1D3038),
             size: 28,
           ),
           const SizedBox(width: 8),
@@ -18,7 +18,7 @@ void showCustomAlert(BuildContext context, String title, String message, {bool i
             child: Text(
               title,
               style: TextStyle(
-                color: isError ? Colors.redAccent : const Color(0xFF4A148C),
+                color: isError ? Colors.redAccent : const Color(0xFF1D3038),
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -33,7 +33,7 @@ void showCustomAlert(BuildContext context, String title, String message, {bool i
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(ctx),
-          child: const Text('Entendido', style: TextStyle(color: Color(0xFF4A148C), fontWeight: FontWeight.bold, fontSize: 16)),
+          child: const Text('Entendido', style: TextStyle(color: Color(0xFF1D3038), fontWeight: FontWeight.bold, fontSize: 16)),
         ),
       ],
     ),

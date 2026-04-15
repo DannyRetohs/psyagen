@@ -44,43 +44,45 @@ class PsicoAgendaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Definimos nuestra paleta de colores Pastel Purple Glass
-    const pastelPurple = Color(0xFFCE93D8); // Purple 200
-    const pastelPink = Color(0xFFF48FB1); // Pink 200
-    const deepPurple = Color(0xFF4A148C); // Para textos
+    const darkTeal = Color(0xFF1D3038);    // Textos muy oscuros
+    const teal = Color(0xFF315A68);         // Primario dominante
+    const sandPeach = Color(0xFFE8BD8A);    // Acento / secundario
+    const warmCoral = Color(0xFFD08C78);    // Terciario de alerta
     
     // Forzamos un texto oscuro legibe (deep purple) en fondos pastel
     final textTheme = GoogleFonts.poppinsTextTheme(ThemeData.light().textTheme);
 
     return MaterialApp(
-      title: 'SereneMind Agenda',
+      title: 'PsicPac',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: Brightness.light, 
         colorScheme: ColorScheme.fromSeed(
           brightness: Brightness.light,
-          seedColor: pastelPurple,
-          primary: pastelPurple,
-          secondary: pastelPink,
+          seedColor: teal,
+          primary: teal,            // Teal como primario dominante
+          secondary: sandPeach,     // Durazno como acento
           surface: Colors.white.withOpacity(0.5), // Base de contenedor glass
           onPrimary: Colors.white, // Texto dentro de botones primarios
+          onSecondary: Colors.white,
         ),
         // Scaffolds deben ser transparentes para que LiquidBackground se vea debajo
         scaffoldBackgroundColor: Colors.transparent, 
         textTheme: textTheme.apply(
-          bodyColor: deepPurple,
-          displayColor: deepPurple,
+          bodyColor: darkTeal,
+          displayColor: darkTeal,
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: Colors.transparent,
-          foregroundColor: deepPurple,
+          foregroundColor: darkTeal,
           elevation: 0,
           centerTitle: true,
           titleTextStyle: textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.bold,
-            color: deepPurple,
+            color: darkTeal,
             letterSpacing: 1.2,
           ),
-          iconTheme: const IconThemeData(color: deepPurple),
+          iconTheme: const IconThemeData(color: darkTeal),
         ),
         cardTheme: const CardThemeData(
           elevation: 0,
@@ -89,17 +91,17 @@ class PsicoAgendaApp extends StatelessWidget {
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            backgroundColor: pastelPurple.withOpacity(0.9), // Semi-transparente
+            backgroundColor: teal,         // Botones fuertemente teal
             foregroundColor: Colors.white, // Texto blanco clásico en botones
             elevation: 8,
-            shadowColor: pastelPurple.withOpacity(0.5),
+            shadowColor: teal.withOpacity(0.5),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 14),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
             textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
           ),
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
-          backgroundColor: pastelPink.withOpacity(0.9),
+          backgroundColor: teal,            // FAB teal dominante
           foregroundColor: Colors.white,
           elevation: 8,
           shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(30))),
@@ -110,22 +112,22 @@ class PsicoAgendaApp extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: pastelPurple.withOpacity(0.3), width: 1),
+            borderSide: BorderSide(color: teal.withOpacity(0.3), width: 1),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide(color: pastelPurple.withOpacity(0.5), width: 1),
+            borderSide: BorderSide(color: teal.withOpacity(0.5), width: 1),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
-            borderSide: const BorderSide(color: pastelPurple, width: 2),
+            borderSide: const BorderSide(color: teal, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(color: Colors.redAccent, width: 2),
           ),
-          labelStyle: TextStyle(color: deepPurple.withOpacity(0.7), fontWeight: FontWeight.w500),
-          hintStyle: TextStyle(color: deepPurple.withOpacity(0.4)),
+          labelStyle: TextStyle(color: darkTeal.withOpacity(0.7), fontWeight: FontWeight.w500),
+          hintStyle: TextStyle(color: darkTeal.withOpacity(0.4)),
         ),
         useMaterial3: true,
       ),

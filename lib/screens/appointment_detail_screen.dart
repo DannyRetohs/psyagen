@@ -20,8 +20,8 @@ class AppointmentDetailScreen extends StatefulWidget {
 class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
   final _notesController = TextEditingController();
   final _incidentsController = TextEditingController();
-  final Color deepPurple = const Color(0xFF4A148C);
-  final Color pastelPurple = const Color(0xFFCE93D8);
+  final Color darkTeal = const Color(0xFF1D3038);
+  final Color sandPeach = const Color(0xFF315A68);
 
   @override
   void initState() {
@@ -79,10 +79,10 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text('Detalle de Cita', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+          title: Text('Detalle de Cita', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
           actions: [
             IconButton(
-              icon: Icon(Icons.edit, color: deepPurple),
+              icon: Icon(Icons.edit, color: darkTeal),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(
                   builder: (_) => AppointmentFormScreen(appointmentId: appt.id)
@@ -114,19 +114,19 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: pastelPurple.withOpacity(0.3),
+                            color: sandPeach.withOpacity(0.3),
                             shape: BoxShape.circle,
                           ),
-                          child: Icon(Icons.person, color: pastelPurple),
+                          child: Icon(Icons.person, color: sandPeach),
                         ),
                         const SizedBox(width: 16),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(patient?.name ?? 'Desconocido', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: deepPurple)),
+                              Text(patient?.name ?? 'Desconocido', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkTeal)),
                               const SizedBox(height: 4),
-                              Text('${patient?.age} años • ${patient?.gender}', style: TextStyle(color: deepPurple.withOpacity(0.7))),
+                              Text('${patient?.age} años • ${patient?.gender}', style: TextStyle(color: darkTeal.withOpacity(0.7))),
                             ],
                           ),
                         ),
@@ -134,19 +134,19 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: Divider(height: 1, color: deepPurple.withOpacity(0.2)),
+                      child: Divider(height: 1, color: darkTeal.withOpacity(0.2)),
                     ),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.psychology, size: 20, color: pastelPurple),
+                        Icon(Icons.psychology, size: 20, color: sandPeach),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Motivo', style: TextStyle(fontSize: 12, color: deepPurple.withOpacity(0.5))),
-                              Text(patient?.generalReason ?? 'No especificado', style: TextStyle(fontWeight: FontWeight.w600, color: deepPurple)),
+                              Text('Motivo', style: TextStyle(fontSize: 12, color: darkTeal.withOpacity(0.5))),
+                              Text(patient?.generalReason ?? 'No especificado', style: TextStyle(fontWeight: FontWeight.w600, color: darkTeal)),
                             ],
                           ),
                         ),
@@ -156,14 +156,14 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.calendar_today, size: 20, color: pastelPurple),
+                        Icon(Icons.calendar_today, size: 20, color: sandPeach),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Fecha y Hora', style: TextStyle(fontSize: 12, color: deepPurple.withOpacity(0.5))),
-                              Text(dateTimeStr, style: TextStyle(fontWeight: FontWeight.w600, color: deepPurple)),
+                              Text('Fecha y Hora', style: TextStyle(fontSize: 12, color: darkTeal.withOpacity(0.5))),
+                              Text(dateTimeStr, style: TextStyle(fontWeight: FontWeight.w600, color: darkTeal)),
                             ],
                           ),
                         ),
@@ -173,7 +173,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              Text('Estatus de la Consulta', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+              Text('Estatus de la Consulta', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
               const SizedBox(height: 10),
               GlassContainer(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -182,8 +182,8 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                     value: appt.status,
                     isExpanded: true,
                     dropdownColor: Colors.white,
-                    icon: Icon(Icons.keyboard_arrow_down, color: pastelPurple),
-                    style: TextStyle(color: deepPurple, fontSize: 16, fontWeight: FontWeight.w500),
+                    icon: Icon(Icons.keyboard_arrow_down, color: sandPeach),
+                    style: TextStyle(color: darkTeal, fontSize: 16, fontWeight: FontWeight.w500),
                     items: ['Programada', 'Llegó', 'No llegó', 'Llegó con retardo', 'Auto (Retardo)'].map((s) {
                       return DropdownMenuItem(value: s, child: Text(s));
                     }).toList(),
@@ -195,7 +195,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
               ),
               const SizedBox(height: 24),
 
-              Text('Reporte Clínico Formal', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+              Text('Reporte Clínico Formal', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
               const SizedBox(height: 10),
               SizedBox(
                 width: double.infinity,
@@ -204,8 +204,8 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                     Expanded(
                       child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: appt.report != null ? const Color(0xFFCE93D8) : Colors.white.withOpacity(0.8),
-                          foregroundColor: appt.report != null ? Colors.white : deepPurple,
+                          backgroundColor: appt.report != null ? const Color(0xFF315A68) : Colors.white.withOpacity(0.8),
+                          foregroundColor: appt.report != null ? Colors.white : darkTeal,
                           padding: const EdgeInsets.symmetric(vertical: 16),
                         ),
                         onPressed: () {
@@ -223,7 +223,7 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
                           borderRadius: BorderRadius.circular(30)
                         ),
                         child: IconButton(
-                          icon: Icon(Icons.share, color: pastelPurple),
+                          icon: Icon(Icons.share, color: sandPeach),
                           onPressed: () {
                             DocumentExporter.exportReportToWord(context, patient!, appt, appt.report!);
                           },
@@ -235,27 +235,27 @@ class _AppointmentDetailScreenState extends State<AppointmentDetailScreen> {
               ),
 
               const SizedBox(height: 24),
-              Text('Notas Sensibles / Observaciones Adicionales', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+              Text('Notas Sensibles / Observaciones Adicionales', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
               const SizedBox(height: 10),
               TextField(
                 controller: _notesController,
                 maxLines: 4,
-                style: TextStyle(color: deepPurple),
+                style: TextStyle(color: darkTeal),
                 decoration: InputDecoration(
                   hintText: 'Escribe las observaciones de la sesión aquí...',
-                  hintStyle: TextStyle(color: deepPurple.withOpacity(0.4)),
+                  hintStyle: TextStyle(color: darkTeal.withOpacity(0.4)),
                 ),
               ),
               const SizedBox(height: 24),
-              Text('Incidencias', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+              Text('Incidencias', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
               const SizedBox(height: 10),
               TextField(
                 controller: _incidentsController,
                 maxLines: 4,
-                style: TextStyle(color: deepPurple),
+                style: TextStyle(color: darkTeal),
                 decoration: InputDecoration(
                   hintText: 'Anota si hubo alguna incidencia, emergencia o evento inusual...',
-                  hintStyle: TextStyle(color: deepPurple.withOpacity(0.4)),
+                  hintStyle: TextStyle(color: darkTeal.withOpacity(0.4)),
                 ),
               ),
               const SizedBox(height: 24),

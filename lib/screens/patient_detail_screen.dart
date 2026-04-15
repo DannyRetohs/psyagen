@@ -17,14 +17,14 @@ class PatientDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<AgendaProvider>();
     final patient = provider.getPatientById(patientId);
-    final Color deepPurple = const Color(0xFF4A148C);
+    final Color darkTeal = const Color(0xFF1D3038);
     
     if (patient == null) {
       return LiquidBackground(
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(title: const Text('Detalle de Paciente')),
-          body: Center(child: Text('El paciente no existe o fue eliminado.', style: TextStyle(color: deepPurple))),
+          body: Center(child: Text('El paciente no existe o fue eliminado.', style: TextStyle(color: darkTeal))),
         ),
       );
     }
@@ -41,10 +41,10 @@ class PatientDetailScreen extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent, // Background handled by outer/global or explicitly we can wrap if not wrapped
         appBar: AppBar(
-          title: Text('Expediente', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+          title: Text('Expediente', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
           actions: [
             IconButton(
-              icon: Icon(Icons.edit, color: deepPurple),
+              icon: Icon(Icons.edit, color: darkTeal),
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => PatientFormScreen(patientId: patientId)));
               },
@@ -61,11 +61,11 @@ class PatientDetailScreen extends StatelessWidget {
                   child: CircleAvatar(
                     radius: 40,
                     backgroundColor: patient.isActive 
-                      ? const Color(0xFFCE93D8).withOpacity(0.3)
+                      ? const Color(0xFF315A68).withOpacity(0.3)
                       : Colors.white.withOpacity(0.5),
                     child: Text(patient.name.substring(0, 1).toUpperCase(), 
                       style: TextStyle(
-                        color: patient.isActive ? const Color(0xFFCE93D8) : deepPurple.withOpacity(0.5), 
+                        color: patient.isActive ? const Color(0xFF315A68) : darkTeal.withOpacity(0.5), 
                         fontWeight: FontWeight.bold, fontSize: 32)
                     ),
                   ),
@@ -77,14 +77,14 @@ class PatientDetailScreen extends StatelessWidget {
                     style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                       fontWeight: FontWeight.bold,
                       decoration: patient.isActive ? null : TextDecoration.lineThrough,
-                      color: patient.isActive ? deepPurple : deepPurple.withOpacity(0.5)
+                      color: patient.isActive ? darkTeal : darkTeal.withOpacity(0.5)
                     )
                   ),
                 ),
                 const SizedBox(height: 4),
                 Center(
                   child: Text('${patient.age} años • ${patient.gender} • ${patient.generalReason}', 
-                    style: TextStyle(color: deepPurple.withOpacity(0.7), fontSize: 16)
+                    style: TextStyle(color: darkTeal.withOpacity(0.7), fontSize: 16)
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -105,7 +105,7 @@ class PatientDetailScreen extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 8),
-                        Text('Este paciente se dio de baja automáticamente por haber acumulado 3 retardos.', style: TextStyle(color: deepPurple.withOpacity(0.7))),
+                        Text('Este paciente se dio de baja automáticamente por haber acumulado 3 retardos.', style: TextStyle(color: darkTeal.withOpacity(0.7))),
                         const SizedBox(height: 12),
                         ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -117,16 +117,16 @@ class PatientDetailScreen extends StatelessWidget {
                               context: context, 
                               builder: (ctx) => AlertDialog(
                                 backgroundColor: Colors.white.withOpacity(0.9),
-                                title: Text('¿Reactivar paciente?', style: TextStyle(color: deepPurple)),
-                                content: Text('Esto volverá a activar al paciente, pero su historial de retardos permanecerá.', style: TextStyle(color: deepPurple.withOpacity(0.7))),
+                                title: Text('¿Reactivar paciente?', style: TextStyle(color: darkTeal)),
+                                content: Text('Esto volverá a activar al paciente, pero su historial de retardos permanecerá.', style: TextStyle(color: darkTeal.withOpacity(0.7))),
                                 actions: [
-                                  TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Cancelar', style: TextStyle(color: deepPurple.withOpacity(0.5)))),
+                                  TextButton(onPressed: () => Navigator.pop(ctx), child: Text('Cancelar', style: TextStyle(color: darkTeal.withOpacity(0.5)))),
                                   TextButton(
                                     onPressed: () {
                                       provider.togglePatientStatus(patientId, true);
                                       Navigator.pop(ctx);
                                     }, 
-                                    child: const Text('Sí, Reactivar', style: TextStyle(color: Color(0xFFCE93D8)))),
+                                    child: const Text('Sí, Reactivar', style: TextStyle(color: Color(0xFF315A68)))),
                                 ],
                               )
                             );
@@ -139,21 +139,21 @@ class PatientDetailScreen extends StatelessWidget {
                 
                 const SizedBox(height: 24),
 
-                Text('Estadísticas', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: deepPurple)),
+                Text('Estadísticas', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkTeal)),
                 const SizedBox(height: 12),
                 Row(
                   children: [
-                    Expanded(child: _statCard('Citas Totales', totalAppts.toString(), Colors.blueAccent, Icons.numbers, deepPurple)),
+                    Expanded(child: _statCard('Citas Totales', totalAppts.toString(), Colors.blueAccent, Icons.numbers, darkTeal)),
                     const SizedBox(width: 8),
-                    Expanded(child: _statCard('Asistencias', attended.toString(), const Color(0xFFCE93D8), Icons.check, deepPurple)),
+                    Expanded(child: _statCard('Asistencias', attended.toString(), const Color(0xFF315A68), Icons.check, darkTeal)),
                   ],
                 ),
                 const SizedBox(height: 8),
                 Row(
                   children: [
-                    Expanded(child: _statCard('Retardos', retards.toString(), Colors.orangeAccent, Icons.timer_outlined, deepPurple)),
+                    Expanded(child: _statCard('Retardos', retards.toString(), Colors.orangeAccent, Icons.timer_outlined, darkTeal)),
                     const SizedBox(width: 8),
-                    Expanded(child: _statCard('Faltas', missed.toString(), const Color(0xFFF48FB1), Icons.close, deepPurple)),
+                    Expanded(child: _statCard('Faltas', missed.toString(), const Color(0xFFE8BD8A), Icons.close, darkTeal)),
                   ],
                 ),
                 
@@ -171,13 +171,13 @@ class PatientDetailScreen extends StatelessWidget {
 
                 const SizedBox(height: 24),
 
-                Text('Historial de Citas', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: deepPurple)),
+                Text('Historial de Citas', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: darkTeal)),
                 const SizedBox(height: 12),
 
                 if (allPatientAppts.isEmpty)
                   Center(child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Text('El paciente no tiene citas registradas.', style: TextStyle(color: deepPurple.withOpacity(0.5))),
+                    child: Text('El paciente no tiene citas registradas.', style: TextStyle(color: darkTeal.withOpacity(0.5))),
                   ))
                 else
                   ListView.builder(
@@ -191,10 +191,10 @@ class PatientDetailScreen extends StatelessWidget {
                       Color statusColor;
                       switch (appt.status) {
                         case 'Llegó':
-                          statusColor = const Color(0xFFCE93D8);
+                          statusColor = const Color(0xFF315A68);
                           break;
                         case 'No llegó':
-                          statusColor = const Color(0xFFF48FB1);
+                          statusColor = const Color(0xFFE8BD8A);
                           break;
                         case 'Llegó con retardo':
                           statusColor = Colors.orangeAccent;
@@ -210,11 +210,11 @@ class PatientDetailScreen extends StatelessWidget {
                         child: ExpansionTile(
                           shape: const Border(),
                           collapsedShape: const Border(),
-                          iconColor: deepPurple,
-                          collapsedIconColor: deepPurple.withOpacity(0.5),
+                          iconColor: darkTeal,
+                          collapsedIconColor: darkTeal.withOpacity(0.5),
                           leading: CircleAvatar(backgroundColor: statusColor, radius: 8),
-                          title: Text(dateStr, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: deepPurple)),
-                          subtitle: Text(appt.status, style: TextStyle(color: deepPurple.withOpacity(0.7), fontSize: 13)),
+                          title: Text(dateStr, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14, color: darkTeal)),
+                          subtitle: Text(appt.status, style: TextStyle(color: darkTeal.withOpacity(0.7), fontSize: 13)),
                           children: [
                             Container(
                               padding: const EdgeInsets.all(16),
@@ -226,13 +226,13 @@ class PatientDetailScreen extends StatelessWidget {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Notas de la sesión:', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple.withOpacity(0.5))),
+                                  Text('Notas de la sesión:', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal.withOpacity(0.5))),
                                   const SizedBox(height: 4),
-                                  Text(appt.notes.isEmpty ? 'Sin notas.' : appt.notes, style: TextStyle(color: deepPurple)),
+                                  Text(appt.notes.isEmpty ? 'Sin notas.' : appt.notes, style: TextStyle(color: darkTeal)),
                                   const SizedBox(height: 12),
-                                  Text('Incidencias:', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple.withOpacity(0.5))),
+                                  Text('Incidencias:', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal.withOpacity(0.5))),
                                   const SizedBox(height: 4),
-                                  Text(appt.incidents.isEmpty ? 'Ninguna registrada.' : appt.incidents, style: TextStyle(color: deepPurple)),
+                                  Text(appt.incidents.isEmpty ? 'Ninguna registrada.' : appt.incidents, style: TextStyle(color: darkTeal)),
                                 ],
                               ),
                             )

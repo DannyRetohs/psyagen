@@ -1,20 +1,23 @@
 import 'dart:io';
+import 'dart:convert';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
-import 'package:uuid/uuid.dart';
 
 class ImageHelper {
   static final ImagePicker _picker = ImagePicker();
 
   static Future<String?> pickAndSaveImage(ImageSource source) async {
-    final XFile? image = await _picker.pickImage(source: source, imageQuality: 70);
+    // Compress aggressively to avoid Firestore 1MB limits
+    final XFile? image = await _picker.pickImage(
+      source: source, 
+      imageQuality: 50, 
+      maxWidth: 600, 
+      maxHeight: 600,
+    );
     if (image == null) return null;
 
-    final appDir = await getApplicationDocumentsDirectory();
-    final fileName = '${const Uuid().v4()}${path.extension(image.path)}';
-    final savedImage = await File(image.path).copy('${appDir.path}/$fileName');
+    final bytes = await image.readAsBytes();
+    final base64String = base64Encode(bytes);
     
-    return savedImage.path;
+    return 'base64,$base64String';
   }
 }

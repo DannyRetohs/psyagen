@@ -26,8 +26,8 @@ class _EventFormScreenState extends State<EventFormScreen> {
 
   bool _isEditing = false;
   late AgendaProvider provider;
-  final Color deepPurple = const Color(0xFF4A148C);
-  final Color pastelPurple = const Color(0xFFCE93D8);
+  final Color darkTeal = const Color(0xFF1D3038);
+  final Color sandPeach = const Color(0xFF315A68);
 
   @override
   void initState() {
@@ -108,7 +108,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent, // Form has liquid background from Main or can wrap
         appBar: AppBar(
-          title: Text(_isEditing ? 'Editar Evento' : 'Nuevo Evento', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+          title: Text(_isEditing ? 'Editar Evento' : 'Nuevo Evento', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -117,14 +117,14 @@ class _EventFormScreenState extends State<EventFormScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Detalles del Suceso', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+                Text('Detalles del Suceso', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
                 const SizedBox(height: 24),
                 DropdownButtonFormField<String>(
                   decoration: const InputDecoration(labelText: 'Tipo de Evento'),
                   value: _selectedType,
                   dropdownColor: Colors.white,
-                  icon: Icon(Icons.keyboard_arrow_down, color: pastelPurple),
-                  items: ['Salida a campo', 'Inasistencia'].map((s) => DropdownMenuItem(value: s, child: Text(s, style: TextStyle(color: deepPurple)))).toList(),
+                  icon: Icon(Icons.keyboard_arrow_down, color: sandPeach),
+                  items: ['Salida a campo', 'Inasistencia'].map((s) => DropdownMenuItem(value: s, child: Text(s, style: TextStyle(color: darkTeal)))).toList(),
                   onChanged: (val) {
                     if (val != null) {
                       setState(() => _selectedType = val);
@@ -136,9 +136,9 @@ class _EventFormScreenState extends State<EventFormScreen> {
                   padding: EdgeInsets.zero,
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    title: Text('Fecha', style: TextStyle(color: deepPurple.withOpacity(0.7), fontSize: 13)),
-                    subtitle: Text(DateFormat('EEEE d MMMM y', 'es_ES').format(_selectedDate), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: deepPurple)),
-                    trailing: Icon(Icons.calendar_today, color: pastelPurple),
+                    title: Text('Fecha', style: TextStyle(color: darkTeal.withOpacity(0.7), fontSize: 13)),
+                    subtitle: Text(DateFormat('EEEE d MMMM y', 'es_ES').format(_selectedDate), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: darkTeal)),
+                    trailing: Icon(Icons.calendar_today, color: sandPeach),
                     onTap: _pickDate,
                   ),
                 ),
@@ -148,30 +148,30 @@ class _EventFormScreenState extends State<EventFormScreen> {
                     padding: EdgeInsets.zero,
                     child: ListTile(
                       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      title: Text('Hora de la Salida', style: TextStyle(color: deepPurple.withOpacity(0.7), fontSize: 13)),
-                      subtitle: Text(_selectedTime.format(context), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: deepPurple)),
-                      trailing: Icon(Icons.access_time, color: pastelPurple),
+                      title: Text('Hora de la Salida', style: TextStyle(color: darkTeal.withOpacity(0.7), fontSize: 13)),
+                      subtitle: Text(_selectedTime.format(context), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: darkTeal)),
+                      trailing: Icon(Icons.access_time, color: sandPeach),
                       onTap: _pickTime,
                     ),
                   ),
                   const SizedBox(height: 24),
                   TextField(
                     controller: _titleController,
-                    style: TextStyle(color: deepPurple),
+                    style: TextStyle(color: darkTeal),
                     decoration: const InputDecoration(labelText: 'Lugar / Título de la Salida'),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _activityController,
                     maxLines: 2,
-                    style: TextStyle(color: deepPurple),
+                    style: TextStyle(color: darkTeal),
                     decoration: const InputDecoration(labelText: 'Actividad que se realizó'),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _materialController,
                     maxLines: 2,
-                    style: TextStyle(color: deepPurple),
+                    style: TextStyle(color: darkTeal),
                     decoration: const InputDecoration(labelText: 'Material empleado / requerido'),
                   ),
                 ],
@@ -191,7 +191,7 @@ class _EventFormScreenState extends State<EventFormScreen> {
                         Expanded(
                           child: Text(
                             'Al marcar inasistencia, este día completo quedará bloqueado en la agenda para registrar nuevas citas.',
-                            style: TextStyle(color: deepPurple, fontSize: 13),
+                            style: TextStyle(color: darkTeal, fontSize: 13),
                           ),
                         ),
                       ],

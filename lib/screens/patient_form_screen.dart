@@ -29,8 +29,8 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
   bool _isEditing = false;
   late AgendaProvider provider;
   
-  final Color deepPurple = const Color(0xFF4A148C);
-  final Color pastelPurple = const Color(0xFFCE93D8);
+  final Color darkTeal = const Color(0xFF1D3038);
+  final Color sandPeach = const Color(0xFF315A68);
 
   @override
   void initState() {
@@ -106,7 +106,7 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent, // Let liquid background show through if wrapped
         appBar: AppBar(
-          title: Text(_isEditing ? 'Editar Paciente' : 'Nuevo Paciente', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+          title: Text(_isEditing ? 'Editar Paciente' : 'Nuevo Paciente', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -117,14 +117,14 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Datos del Paciente', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+                  Text('Datos del Paciente', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
                   const SizedBox(height: 24),
                   TextFormField(
                     controller: _nameController,
-                    style: TextStyle(color: deepPurple),
+                    style: TextStyle(color: darkTeal),
                     decoration: InputDecoration(
                       labelText: 'Nombre Completo',
-                      labelStyle: TextStyle(color: deepPurple.withOpacity(0.5)),
+                      labelStyle: TextStyle(color: darkTeal.withOpacity(0.5)),
                     ),
                     validator: (v) => v!.isEmpty ? 'Requerido' : null,
                   ),
@@ -132,12 +132,12 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                   DropdownButtonFormField<int>(
                     value: _age,
                     dropdownColor: Colors.white,
-                    icon: Icon(Icons.keyboard_arrow_down, color: pastelPurple),
+                    icon: Icon(Icons.keyboard_arrow_down, color: sandPeach),
                     decoration: InputDecoration(
                       labelText: 'Edad (5 - 17 años)',
-                      labelStyle: TextStyle(color: deepPurple.withOpacity(0.5)),
+                      labelStyle: TextStyle(color: darkTeal.withOpacity(0.5)),
                     ),
-                    items: ageList.map((a) => DropdownMenuItem(value: a, child: Text('$a años', style: TextStyle(color: deepPurple)))).toList(),
+                    items: ageList.map((a) => DropdownMenuItem(value: a, child: Text('$a años', style: TextStyle(color: darkTeal)))).toList(),
                     onChanged: (val) {
                       if (val != null) setState(() => _age = val);
                     },
@@ -146,12 +146,12 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                   DropdownButtonFormField<String>(
                     value: _gender,
                     dropdownColor: Colors.white,
-                    icon: Icon(Icons.keyboard_arrow_down, color: pastelPurple),
+                    icon: Icon(Icons.keyboard_arrow_down, color: sandPeach),
                     decoration: InputDecoration(
                       labelText: 'Género',
-                      labelStyle: TextStyle(color: deepPurple.withOpacity(0.5)),
+                      labelStyle: TextStyle(color: darkTeal.withOpacity(0.5)),
                     ),
-                    items: ['Masculino', 'Femenino'].map((g) => DropdownMenuItem(value: g, child: Text(g, style: TextStyle(color: deepPurple)))).toList(),
+                    items: ['Masculino', 'Femenino'].map((g) => DropdownMenuItem(value: g, child: Text(g, style: TextStyle(color: darkTeal)))).toList(),
                     onChanged: (val) {
                       if (val != null) setState(() => _gender = val);
                     },
@@ -160,12 +160,12 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                   DropdownButtonFormField<String>(
                     value: _reason.isEmpty ? null : _reason,
                     dropdownColor: Colors.white,
-                    icon: Icon(Icons.keyboard_arrow_down, color: pastelPurple),
+                    icon: Icon(Icons.keyboard_arrow_down, color: sandPeach),
                     decoration: InputDecoration(
                       labelText: 'Motivo General de Consulta',
-                      labelStyle: TextStyle(color: deepPurple.withOpacity(0.5)),
+                      labelStyle: TextStyle(color: darkTeal.withOpacity(0.5)),
                     ),
-                    items: provider.reasons.map((r) => DropdownMenuItem(value: r, child: Text(r, style: TextStyle(color: deepPurple)))).toList(),
+                    items: provider.reasons.map((r) => DropdownMenuItem(value: r, child: Text(r, style: TextStyle(color: darkTeal)))).toList(),
                     onChanged: (val) {
                       if (val != null) setState(() => _reason = val);
                     },
@@ -174,16 +174,16 @@ class _PatientFormScreenState extends State<PatientFormScreen> {
                     const SizedBox(height: 20),
                     TextFormField(
                       controller: _customReasonController,
-                      style: TextStyle(color: deepPurple),
+                      style: TextStyle(color: darkTeal),
                       decoration: InputDecoration(
                         labelText: 'Especificar Motivo',
-                        labelStyle: TextStyle(color: deepPurple.withOpacity(0.5)),
+                        labelStyle: TextStyle(color: darkTeal.withOpacity(0.5)),
                       ),
                       validator: (v) => v!.isEmpty ? 'Requerido' : null,
                     ),
                   ],
                   const SizedBox(height: 24),
-                  Text('Documentos Clínicos', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+                  Text('Documentos Clínicos', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
                   const SizedBox(height: 12),
                   DocumentPickerWidget(
                     documents: _documents,

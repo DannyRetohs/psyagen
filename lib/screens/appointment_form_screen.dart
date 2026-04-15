@@ -24,8 +24,8 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
   
   bool _isEditing = false;
   late AgendaProvider provider;
-  final Color deepPurple = const Color(0xFF4A148C);
-  final Color pastelPurple = const Color(0xFFCE93D8);
+  final Color darkTeal = const Color(0xFF1D3038);
+  final Color sandPeach = const Color(0xFF315A68);
 
   @override
   void initState() {
@@ -154,7 +154,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent, // Allow liquid form parent to show
         appBar: AppBar(
-          title: Text(_isEditing ? 'Editar Cita' : 'Nueva Cita', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+          title: Text(_isEditing ? 'Editar Cita' : 'Nueva Cita', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
         ),
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
@@ -163,18 +163,18 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Detalles de la Cita', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+                Text('Detalles de la Cita', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
                 const SizedBox(height: 24),
                 DropdownButtonFormField<Patient>(
                   decoration: const InputDecoration(labelText: 'Paciente'),
                   value: _selectedPatient,
                   dropdownColor: Colors.white,
-                  icon: Icon(Icons.keyboard_arrow_down, color: pastelPurple),
-                  items: patients.map((p) => DropdownMenuItem(value: p, child: Text(p.name, style: TextStyle(color: deepPurple)))).toList(),
+                  icon: Icon(Icons.keyboard_arrow_down, color: sandPeach),
+                  items: patients.map((p) => DropdownMenuItem(value: p, child: Text(p.name, style: TextStyle(color: darkTeal)))).toList(),
                   onChanged: (val) {
                     setState(() => _selectedPatient = val);
                   },
-                  hint: Text('Seleccionar paciente', style: TextStyle(color: deepPurple.withOpacity(0.5))),
+                  hint: Text('Seleccionar paciente', style: TextStyle(color: darkTeal.withOpacity(0.5))),
                 ),
                 if (_selectedPatient != null && !_selectedPatient!.isActive)
                   Container(
@@ -192,7 +192,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                         Expanded(
                           child: Text(
                             'Advertencia: Este paciente está dado de baja definitiva por retardos recurrentes.',
-                            style: TextStyle(color: deepPurple, fontSize: 13),
+                            style: TextStyle(color: darkTeal, fontSize: 13),
                           ),
                         ),
                       ],
@@ -203,12 +203,12 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                   padding: EdgeInsets.zero,
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    title: Text('Fecha de la Cita', style: TextStyle(color: deepPurple.withOpacity(0.7), fontSize: 13)),
-                    subtitle: Text(DateFormat('EEEE d MMMM y', 'es_ES').format(_selectedDate), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: deepPurple)),
+                    title: Text('Fecha de la Cita', style: TextStyle(color: darkTeal.withOpacity(0.7), fontSize: 13)),
+                    subtitle: Text(DateFormat('EEEE d MMMM y', 'es_ES').format(_selectedDate), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: darkTeal)),
                     trailing: Container(
                       padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(color: pastelPurple.withOpacity(0.3), shape: BoxShape.circle),
-                      child: Icon(Icons.calendar_today, color: pastelPurple),
+                      decoration: BoxDecoration(color: sandPeach.withOpacity(0.3), shape: BoxShape.circle),
+                      child: Icon(Icons.calendar_today, color: sandPeach),
                     ),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     onTap: _pickDate,
@@ -219,12 +219,12 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                   padding: EdgeInsets.zero,
                   child: ListTile(
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    title: Text('Hora de la Cita', style: TextStyle(color: deepPurple.withOpacity(0.7), fontSize: 13)),
-                    subtitle: Text(_selectedTime.format(context), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: deepPurple)),
+                    title: Text('Hora de la Cita', style: TextStyle(color: darkTeal.withOpacity(0.7), fontSize: 13)),
+                    subtitle: Text(_selectedTime.format(context), style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: darkTeal)),
                     trailing: Container(
                       padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(color: pastelPurple.withOpacity(0.3), shape: BoxShape.circle),
-                      child: Icon(Icons.access_time, color: pastelPurple),
+                      decoration: BoxDecoration(color: sandPeach.withOpacity(0.3), shape: BoxShape.circle),
+                      child: Icon(Icons.access_time, color: sandPeach),
                     ),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                     onTap: _pickTime,

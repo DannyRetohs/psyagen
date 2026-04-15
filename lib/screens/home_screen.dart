@@ -9,6 +9,7 @@ import 'patient_list_screen.dart';
 import 'appointment_form_screen.dart';
 import 'appointment_detail_screen.dart';
 import 'event_form_screen.dart';
+import 'psychoeducation_form_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late DateTime _focusedDay;
   late DateTime _selectedDay;
   CalendarFormat _calendarFormat = CalendarFormat.week;
-  final Color deepPurple = const Color(0xFF4A148C);
+  final Color darkTeal = const Color(0xFF1D3038);
 
   @override
   void initState() {
@@ -33,43 +34,56 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<AgendaProvider>();
-    
+
+    if (provider.isLoading) {
+      return Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Center(child: CircularProgressIndicator(color: darkTeal)),
+      );
+    }
+
     // Filtramos las citas por _selectedDay
     final dayAppointments = provider.appointments.where((a) {
       return a.scheduledDate.year == _selectedDay.year &&
-             a.scheduledDate.month == _selectedDay.month &&
-             a.scheduledDate.day == _selectedDay.day;
+          a.scheduledDate.month == _selectedDay.month &&
+          a.scheduledDate.day == _selectedDay.day;
     }).toList();
-    
+
     dayAppointments.sort((a, b) => a.scheduledDate.compareTo(b.scheduledDate));
 
     // Filtramos los eventos del profesional
     final dayEvents = provider.events.where((e) {
       return e.date.year == _selectedDay.year &&
-             e.date.month == _selectedDay.month &&
-             e.date.day == _selectedDay.day;
+          e.date.month == _selectedDay.month &&
+          e.date.day == _selectedDay.day;
     }).toList();
     dayEvents.sort((a, b) => a.date.compareTo(b.date));
 
     final bool isAbsent = dayEvents.any((e) => e.type == 'Inasistencia');
 
     final int totalDay = dayAppointments.length;
-    final int attendedDay = dayAppointments.where((a) => a.status.contains('Llegó')).length;
-    final int missedDay = dayAppointments.where((a) => a.status == 'No llegó').length;
-    final int pendingDay = dayAppointments.where((a) => a.status == 'Programada').length;
+    final int attendedDay = dayAppointments
+        .where((a) => a.status.contains('Llegó'))
+        .length;
+    final int missedDay = dayAppointments
+        .where((a) => a.status == 'No llegó')
+        .length;
+    final int pendingDay = dayAppointments
+        .where((a) => a.status == 'Programada')
+        .length;
 
     return Scaffold(
       backgroundColor: Colors.transparent, // Dejar ver el LiquidBackground
-      appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            // Text('PsicoAgendaAAAA', style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold)),
-            Image.asset('assets/images/logo2.png', height: 150),
-          ],
-        ),
-      ),
 
+      // appBar: AppBar(
+      //   title: Row(
+      //     mainAxisSize: MainAxisSize.min,
+      //     children: [
+      //       // Text('PsicoAgendaAAAA', style: TextStyle(color: darkTeal, fontWeight: FontWeight.bold)),
+      //       Image.asset('assets/images/logo2.png', height: 150),
+      //     ],
+      //   ),
+      // ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Padding(
@@ -80,7 +94,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 _buildHeader(context),
                 const SizedBox(height: 20),
 
-                _buildSummaryCards(totalDay, attendedDay, missedDay, pendingDay),
+                _buildSummaryCards(
+                  totalDay,
+                  attendedDay,
+                  missedDay,
+                  pendingDay,
+                ),
                 const SizedBox(height: 20),
 
                 // if (totalDay > 0) ...[
@@ -97,11 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 //               centerSpaceRadius: 25,
                 //               sections: [
                 //                 if (attendedDay > 0)
-                //                   PieChartSectionData(color: const Color(0xFFCE93D8), value: attendedDay.toDouble(), title: '$attendedDay', radius: 30, titleStyle: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+                //                   PieChartSectionData(color: const Color(0xFF315A68), value: attendedDay.toDouble(), title: '$attendedDay', radius: 30, titleStyle: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
                 //                 if (missedDay > 0)
-                //                   PieChartSectionData(color: const Color(0xFFF48FB1), value: missedDay.toDouble(), title: '$missedDay', radius: 30, titleStyle: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+                //                   PieChartSectionData(color: const Color(0xFFE8BD8A), value: missedDay.toDouble(), title: '$missedDay', radius: 30, titleStyle: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
                 //                 if (pendingDay > 0)
-                //                   PieChartSectionData(color: Colors.black26, value: pendingDay.toDouble(), title: '$pendingDay', radius: 30, titleStyle: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+                //                   PieChartSectionData(color: Colors.black26, value: pendingDay.toDouble(), title: '$pendingDay', radius: 30, titleStyle: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
                 //               ]
                 //             )
                 //           ),
@@ -111,9 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 //           mainAxisAlignment: MainAxisAlignment.center,
                 //           crossAxisAlignment: CrossAxisAlignment.start,
                 //           children: [
-                //             _indicator(const Color(0xFFCE93D8), 'Asistencias'),
+                //             _indicator(const Color(0xFF315A68), 'Asistencias'),
                 //             const SizedBox(height: 4),
-                //             _indicator(const Color(0xFFF48FB1), 'Faltas'),
+                //             _indicator(const Color(0xFFE8BD8A), 'Faltas'),
                 //             const SizedBox(height: 4),
                 //             _indicator(Colors.black26, 'Pendientes'),
                 //           ],
@@ -123,9 +142,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   ),
                 //   const SizedBox(height: 20),
                 // ],
-
                 GlassContainer(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
                   child: TableCalendar(
                     firstDay: DateTime.utc(2020, 1, 1),
                     lastDay: DateTime.utc(2030, 12, 31),
@@ -154,30 +175,58 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     headerStyle: HeaderStyle(
                       titleCentered: true,
-                      titleTextStyle: TextStyle(color: deepPurple, fontSize: 16, fontWeight: FontWeight.bold),
+                      titleTextStyle: TextStyle(
+                        color: darkTeal,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                       formatButtonDecoration: BoxDecoration(
                         color: Colors.white.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(color: Colors.black12, width: 1),
                       ),
-                      formatButtonTextStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: deepPurple),
-                      leftChevronIcon: Icon(Icons.chevron_left, color: deepPurple),
-                      rightChevronIcon: Icon(Icons.chevron_right, color: deepPurple),
+                      formatButtonTextStyle: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: darkTeal,
+                      ),
+                      leftChevronIcon: Icon(
+                        Icons.chevron_left,
+                        color: darkTeal,
+                      ),
+                      rightChevronIcon: Icon(
+                        Icons.chevron_right,
+                        color: darkTeal,
+                      ),
                     ),
                     calendarStyle: CalendarStyle(
-                      defaultTextStyle: TextStyle(color: deepPurple),
-                      weekendTextStyle: TextStyle(color: deepPurple.withOpacity(0.7)),
-                      outsideTextStyle: TextStyle(color: deepPurple.withOpacity(0.4)),
+                      defaultTextStyle: TextStyle(color: darkTeal),
+                      weekendTextStyle: TextStyle(
+                        color: darkTeal.withOpacity(0.7),
+                      ),
+                      outsideTextStyle: TextStyle(
+                        color: darkTeal.withOpacity(0.4),
+                      ),
                       selectedDecoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primary,
                         shape: BoxShape.circle,
                         boxShadow: [
-                          BoxShadow(color: Theme.of(context).colorScheme.primary.withOpacity(0.5), blurRadius: 10)
-                        ]
+                          BoxShadow(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.primary.withOpacity(0.5),
+                            blurRadius: 10,
+                          ),
+                        ],
                       ),
                       todayDecoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.6),
+                        color: const Color(0xFFE8BD8A).withOpacity(0.25),
                         shape: BoxShape.circle,
+                        border: Border.all(color: const Color(0xFFE8BD8A), width: 1.5),
+                      ),
+                      todayTextStyle: const TextStyle(
+                        color: Color(0xFF1D3038),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -185,8 +234,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 const SizedBox(height: 20),
 
                 Text(
-                  _isToday(_selectedDay) ? 'Citas para Hoy' : 'Citas del Día', 
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: deepPurple)
+                  _isToday(_selectedDay) ? 'Citas para Hoy' : 'Citas del Día',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: darkTeal,
+                  ),
                 ),
                 const SizedBox(height: 16),
 
@@ -201,7 +253,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         const Expanded(
                           child: Text(
                             'Día inhábil. Has marcado Inasistencia para todo este día.',
-                            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black87),
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
                           ),
                         ),
                         IconButton(
@@ -211,24 +266,51 @@ class _HomeScreenState extends State<HomeScreen> {
                               context: context,
                               builder: (ctx) => AlertDialog(
                                 backgroundColor: Colors.white.withOpacity(0.9),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                title: const Text('Eliminar Inasistencia', style: TextStyle(color: Color(0xFF4A148C), fontWeight: FontWeight.bold)),
-                                content: const Text('¿Estás seguro de que deseas eliminar este evento? Se liberará el horario.'),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                title: const Text(
+                                  'Eliminar Inasistencia',
+                                  style: TextStyle(
+                                    color: Color(0xFF1D3038),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                content: const Text(
+                                  '¿Estás seguro de que deseas eliminar este evento? Se liberará el horario.',
+                                ),
                                 actions: [
                                   TextButton(
                                     onPressed: () => Navigator.pop(ctx),
-                                    child: const Text('Cancelar', style: TextStyle(color: Colors.black54)),
+                                    child: const Text(
+                                      'Cancelar',
+                                      style: TextStyle(color: Colors.black54),
+                                    ),
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      final ev = dayEvents.firstWhere((e) => e.type == 'Inasistencia');
+                                      final ev = dayEvents.firstWhere(
+                                        (e) => e.type == 'Inasistencia',
+                                      );
                                       provider.deleteEvent(ev.id);
                                       Navigator.pop(ctx);
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(content: Text('Inasistencia eliminada')),
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            'Inasistencia eliminada',
+                                          ),
+                                        ),
                                       );
                                     },
-                                    child: const Text('Eliminar', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                    child: const Text(
+                                      'Eliminar',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -243,54 +325,113 @@ class _HomeScreenState extends State<HomeScreen> {
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: dayEvents.where((e) => e.type == 'Salida a campo').length,
+                    itemCount: dayEvents
+                        .where((e) => e.type == 'Salida a campo')
+                        .length,
                     itemBuilder: (context, index) {
-                      final ev = dayEvents.where((e) => e.type == 'Salida a campo').toList()[index];
+                      final ev = dayEvents
+                          .where((e) => e.type == 'Salida a campo')
+                          .toList()[index];
                       final timeStr = DateFormat('h:mm a').format(ev.date);
 
                       return GlassContainer(
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(4),
                         child: ListTile(
-                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
                           leading: Container(
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
                               color: Colors.white.withOpacity(0.5),
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Text(timeStr, style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+                            child: Text(
+                              timeStr,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: darkTeal,
+                              ),
+                            ),
                           ),
-                          title: const Text('Salida a Campo', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: Color(0xFFCE93D8))),
-                          subtitle: Text(ev.title ?? 'Sin lugar especificado', style: const TextStyle(color: Colors.black54, fontSize: 13)),
+                          title: const Text(
+                            'Salida a Campo',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16,
+                              color: Color(0xFF315A68),
+                            ),
+                          ),
+                          subtitle: Text(
+                            ev.title ?? 'Sin lugar especificado',
+                            style: const TextStyle(
+                              color: Colors.black54,
+                              fontSize: 13,
+                            ),
+                          ),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              Icon(Icons.airport_shuttle, color: deepPurple),
+                              Icon(Icons.airport_shuttle, color: darkTeal),
                               IconButton(
-                                icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                  size: 20,
+                                ),
                                 onPressed: () {
                                   showDialog(
                                     context: context,
                                     builder: (ctx) => AlertDialog(
-                                      backgroundColor: Colors.white.withOpacity(0.9),
-                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                                      title: const Text('Eliminar Salida a Campo', style: TextStyle(color: Color(0xFF4A148C), fontWeight: FontWeight.bold)),
-                                      content: const Text('¿Estás seguro de que deseas eliminar este evento?'),
+                                      backgroundColor: Colors.white.withOpacity(
+                                        0.9,
+                                      ),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      title: const Text(
+                                        'Eliminar Salida a Campo',
+                                        style: TextStyle(
+                                          color: Color(0xFF1D3038),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      content: const Text(
+                                        '¿Estás seguro de que deseas eliminar este evento?',
+                                      ),
                                       actions: [
                                         TextButton(
                                           onPressed: () => Navigator.pop(ctx),
-                                          child: const Text('Cancelar', style: TextStyle(color: Colors.black54)),
+                                          child: const Text(
+                                            'Cancelar',
+                                            style: TextStyle(
+                                              color: Colors.black54,
+                                            ),
+                                          ),
                                         ),
                                         TextButton(
                                           onPressed: () {
                                             provider.deleteEvent(ev.id);
                                             Navigator.pop(ctx);
-                                            ScaffoldMessenger.of(context).showSnackBar(
-                                              const SnackBar(content: Text('Salida a campo eliminada')),
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                  'Salida a campo eliminada',
+                                                ),
+                                              ),
                                             );
                                           },
-                                          child: const Text('Eliminar', style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
+                                          child: const Text(
+                                            'Eliminar',
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
                                         ),
                                       ],
                                     ),
@@ -307,7 +448,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 if (dayAppointments.isEmpty)
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 30),
-                    child: Center(child: Text('No hay citas en este día.', style: TextStyle(color: Colors.black54))),
+                    child: Center(
+                      child: Text(
+                        'No hay citas en este día.',
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                    ),
                   )
                 else
                   ListView.builder(
@@ -317,15 +463,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       final appt = dayAppointments[index];
                       final patient = provider.getPatientById(appt.patientId);
-                      final timeStr = DateFormat('h:mm a').format(appt.scheduledDate);
-                      
+                      final timeStr = DateFormat(
+                        'h:mm a',
+                      ).format(appt.scheduledDate);
+
                       Color statusColor;
                       switch (appt.status) {
                         case 'Llegó':
-                          statusColor = const Color(0xFFA2D893); // Pastel purple
+                          statusColor = const Color(
+                            0xFF8DB09E,
+                          ); // Pastel purple
                           break;
                         case 'No llegó':
-                          statusColor = const Color(0xFFF48FB1); // Pastel pink
+                          statusColor = const Color(0xFFE8BD8A); // Pastel pink
                           break;
                         case 'Llegó con retardo':
                           statusColor = Colors.orangeAccent;
@@ -347,43 +497,87 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Container(width: 8, color: statusColor),
                                 Expanded(
                                   child: ListTile(
-                                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
                                     leading: Container(
                                       padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                         color: Colors.white.withOpacity(0.5),
                                         borderRadius: BorderRadius.circular(12),
                                       ),
-                                      child: Text(timeStr, style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+                                      child: Text(
+                                        timeStr,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          color: darkTeal,
+                                        ),
+                                      ),
                                     ),
                                     title: Row(
                                       children: [
-                                        Flexible(child: Text(patient?.name ?? 'Paciente desconocido', overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16, color: deepPurple))),
+                                        Flexible(
+                                          child: Text(
+                                            patient?.name ??
+                                                'Paciente desconocido',
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 16,
+                                              color: darkTeal,
+                                            ),
+                                          ),
+                                        ),
                                         if (patient != null) ...[
                                           const SizedBox(width: 6),
                                           Icon(
-                                            patient.gender == 'Femenino' ? Icons.female : Icons.male,
+                                            patient.gender == 'Femenino'
+                                                ? Icons.female
+                                                : Icons.male,
                                             size: 18,
-                                            color: patient.gender == 'Femenino' ? const Color(0xFFF48FB1) : const Color(0xFF2D9DF2),
-                                          )
-                                        ]
+                                            color: patient.gender == 'Femenino'
+                                                ? const Color(0xFFE8BD8A)
+                                                : const Color(0xFF7A9BB8),
+                                          ),
+                                        ],
                                       ],
                                     ),
                                     subtitle: Padding(
                                       padding: const EdgeInsets.only(top: 4),
                                       child: Row(
                                         children: [
-                                          Icon(Icons.circle, size: 10, color: statusColor),
+                                          Icon(
+                                            Icons.circle,
+                                            size: 10,
+                                            color: statusColor,
+                                          ),
                                           const SizedBox(width: 4),
-                                          Text(appt.status, style: const TextStyle(color: Colors.black54, fontSize: 13)),
+                                          Text(
+                                            appt.status,
+                                            style: const TextStyle(
+                                              color: Colors.black54,
+                                              fontSize: 13,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
-                                    trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black38),
+                                    trailing: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 16,
+                                      color: Color(0xFFE8BD8A),
+                                    ),
                                     onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(
-                                        builder: (_) => AppointmentDetailScreen(appointmentId: appt.id)
-                                      ));
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              AppointmentDetailScreen(
+                                                appointmentId: appt.id,
+                                              ),
+                                        ),
+                                      );
                                     },
                                   ),
                                 ),
@@ -400,6 +594,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton.extended(
         heroTag: 'home_fab',
         onPressed: () {
@@ -416,24 +611,91 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text('¿Qué deseas registrar?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: deepPurple)),
+                      child: Text(
+                        '¿Qué deseas registrar?',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: darkTeal,
+                        ),
+                      ),
                     ),
                     ListTile(
-                      leading: const CircleAvatar(backgroundColor: Color(0xFFCE93D8), child: Icon(Icons.person, color: Colors.white)),
-                      title: Text('Nueva Cita Clínica', style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold)),
-                      subtitle: const Text('Agendar paciente en consultorio', style: TextStyle(color: Colors.black54)),
+                      leading: const CircleAvatar(
+                        backgroundColor: Color(0xFF315A68),
+                        child: Icon(Icons.person, color: Colors.white),
+                      ),
+                      title: Text(
+                        'Nueva Cita Clínica',
+                        style: TextStyle(
+                          color: darkTeal,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: const Text(
+                        'Agendar paciente en consultorio',
+                        style: TextStyle(color: Colors.black54),
+                      ),
                       onTap: () {
                         Navigator.pop(ctx);
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const AppointmentFormScreen()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const AppointmentFormScreen(),
+                          ),
+                        );
                       },
                     ),
                     ListTile(
-                      leading: const CircleAvatar(backgroundColor: Color(0xFFF48FB1), child: Icon(Icons.work_off, color: Colors.white)),
-                      title: Text('Salida a Campo / Inasistencia', style: TextStyle(color: deepPurple, fontWeight: FontWeight.bold)),
-                      subtitle: const Text('Bloquear horario del profesional', style: TextStyle(color: Colors.black54)),
+                      leading: const CircleAvatar(
+                        backgroundColor: Color(0xFFE8BD8A),
+                        child: Icon(Icons.work_off, color: Colors.white),
+                      ),
+                      title: Text(
+                        'Salida a Campo / Inasistencia',
+                        style: TextStyle(
+                          color: darkTeal,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: const Text(
+                        'Bloquear horario del profesional',
+                        style: TextStyle(color: Colors.black54),
+                      ),
                       onTap: () {
                         Navigator.pop(ctx);
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => const EventFormScreen()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const EventFormScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    ListTile(
+                      leading: CircleAvatar(
+                        backgroundColor: const Color(0xFF315A68).withOpacity(0.15),
+                        child: const Icon(Icons.school, color: Color(0xFF315A68)),
+                      ),
+                      title: Text(
+                        'Psicoeducación',
+                        style: TextStyle(
+                          color: darkTeal,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      subtitle: const Text(
+                        'Registrar sesión educativa con paciente',
+                        style: TextStyle(color: Colors.black54),
+                      ),
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const PsychoeducationFormScreen(),
+                          ),
+                        );
                       },
                     ),
                     const SizedBox(height: 16),
@@ -444,7 +706,10 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
         icon: const Icon(Icons.add, color: Colors.white),
-        label: const Text('Agregar', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        label: const Text(
+          'Agregar',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }
@@ -456,7 +721,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildHeader(BuildContext context) {
     final todayStr = DateFormat('EEEE, d MMMM', 'es').format(DateTime.now());
-    
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -464,17 +729,39 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Hola\nPsic. Sarai', 
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold, color: deepPurple),
+              'Hola\nPsic. Sarai',
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: darkTeal,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
-              todayStr[0].toUpperCase() + todayStr.substring(1), 
+              todayStr[0].toUpperCase() + todayStr.substring(1),
               style: const TextStyle(color: Colors.black54, fontSize: 16),
             ),
           ],
         ),
-        Image.asset('assets/images/Sujeto.png', fit: BoxFit.contain, width: 150, height: 150),
+        ShaderMask(
+          shaderCallback: (Rect bounds) {
+            return LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [Colors.black, Colors.black.withOpacity(0.0)],
+              stops: const [
+                0.75,
+                1.0,
+              ], // El desvanecido ocurre en el último 25% de la imagen
+            ).createShader(bounds);
+          },
+          blendMode: BlendMode.dstIn,
+          child: Image.asset(
+            'assets/images/sarahi_nobg.png',
+            fit: BoxFit.contain,
+            width: 140,
+            alignment: Alignment.topRight,
+          ),
+        ),
       ],
     );
   }
@@ -482,25 +769,74 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildSummaryCards(int total, int attended, int missed, int pending) {
     return Row(
       children: [
-        Expanded(child: _summaryCard('Total', total.toString(), Colors.blueAccent, Icons.list_alt)),
+        Expanded(
+          child: _summaryCard(
+            'Total',
+            total.toString(),
+            Colors.blueAccent,
+            Icons.list_alt,
+          ),
+        ),
         const SizedBox(width: 8),
-        Expanded(child: _summaryCard('Asist.', attended.toString(), const Color(0xFFCE93D8), Icons.check_circle_outline)),
+        Expanded(
+          child: _summaryCard(
+            'Asist.',
+            attended.toString(),
+            const Color(0xFF315A68),
+            Icons.check_circle_outline,
+          ),
+        ),
         const SizedBox(width: 8),
-        Expanded(child: _summaryCard('Faltas', missed.toString(), const Color(0xFFF48FB1), Icons.cancel_outlined)),
+        Expanded(
+          child: _summaryCard(
+            'Faltas',
+            missed.toString(),
+            const Color(0xFFE8BD8A),
+            Icons.cancel_outlined,
+          ),
+        ),
       ],
     );
   }
 
   Widget _summaryCard(String title, String count, Color color, IconData icon) {
-    return GlassContainer(
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.6),
+        borderRadius: BorderRadius.circular(16),
+        border: Border(
+          bottom: BorderSide(color: const Color(0xFFE8BD8A), width: 3),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFE8BD8A).withOpacity(0.15),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
       child: Column(
         children: [
           Icon(icon, color: color, size: 28),
           const SizedBox(height: 8),
-          Text(count, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: deepPurple)),
+          Text(
+            count,
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+              color: darkTeal,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(title, style: TextStyle(fontSize: 12, color: deepPurple.withOpacity(0.7), fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 12,
+              color: darkTeal.withOpacity(0.7),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );
@@ -511,7 +847,14 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         Icon(Icons.circle, size: 12, color: color),
         const SizedBox(width: 6),
-        Text(text, style: TextStyle(fontSize: 13, color: deepPurple, fontWeight: FontWeight.bold)),
+        Text(
+          text,
+          style: TextStyle(
+            fontSize: 13,
+            color: darkTeal,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ],
     );
   }

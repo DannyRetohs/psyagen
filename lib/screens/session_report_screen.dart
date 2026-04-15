@@ -17,8 +17,8 @@ class SessionReportScreen extends StatefulWidget {
 }
 
 class _SessionReportScreenState extends State<SessionReportScreen> {
-  final Color deepPurple = const Color(0xFF4A148C);
-  final Color pastelPurple = const Color(0xFFCE93D8);
+  final Color darkTeal = const Color(0xFF1D3038);
+  final Color sandPeach = const Color(0xFF315A68);
 
   final _mentalStateCtrl = TextEditingController();
   final _cognitiveAreaCtrl = TextEditingController();
@@ -112,16 +112,16 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+        Text(label, style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
         const SizedBox(height: 8),
         TextField(
           controller: controller,
           maxLines: null,
           minLines: 3,
-          style: TextStyle(color: deepPurple),
+          style: TextStyle(color: darkTeal),
           decoration: InputDecoration(
             hintText: 'Escribe aquí...',
-            hintStyle: TextStyle(color: deepPurple.withOpacity(0.4)),
+            hintStyle: TextStyle(color: darkTeal.withOpacity(0.4)),
             filled: true,
             fillColor: Colors.white.withOpacity(0.4),
             border: OutlineInputBorder(
@@ -141,10 +141,10 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text('Reporte de Sesión', style: TextStyle(fontWeight: FontWeight.bold, color: deepPurple)),
+          title: Text('Reporte de Sesión', style: TextStyle(fontWeight: FontWeight.bold, color: darkTeal)),
           actions: [
             IconButton(
-              icon: Icon(Icons.check, color: deepPurple),
+              icon: Icon(Icons.check, color: darkTeal),
               onPressed: _saveReport,
             )
           ],
@@ -158,7 +158,7 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Evaluación Inicial', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+                    Text('Evaluación Inicial', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
                     const SizedBox(height: 16),
                     _buildTextField('Estado mental y apariencia general:', _mentalStateCtrl),
                     _buildTextField('Área cognitiva:', _cognitiveAreaCtrl),
@@ -173,7 +173,7 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Desarrollo de la Sesión', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+                    Text('Desarrollo de la Sesión', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
                     const SizedBox(height: 16),
                     _buildTextField('Motivo de atención:', _reasonCtrl),
                     _buildTextField('Objetivo de intervención:', _goalCtrl),
@@ -189,7 +189,7 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Plan y Pronóstico', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: pastelPurple)),
+                    Text('Plan y Pronóstico', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold, color: sandPeach)),
                     const SizedBox(height: 16),
                     _buildTextField('Plan de intervención:', _planCtrl),
                     _buildTextField('Pronóstico y número aproximado de sesiones:', _prognosisCtrl),
@@ -215,14 +215,14 @@ class _SessionReportScreenState extends State<SessionReportScreen> {
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white.withOpacity(0.8),
-                    foregroundColor: deepPurple,
+                    foregroundColor: darkTeal,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                   ),
                   onPressed: () {
                     _saveReport(); // Auto-save antes de exportar
                     _exportReport();
                   },
-                  icon: Icon(Icons.share, color: pastelPurple),
+                  icon: Icon(Icons.share, color: sandPeach),
                   label: const Text('Guardar y Exportar a Word', style: TextStyle(fontWeight: FontWeight.bold)),
                 ),
               ),

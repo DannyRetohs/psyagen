@@ -19,37 +19,46 @@ class _LiquidBackgroundState extends State<LiquidBackground>
   void initState() {
     super.initState();
     _controller = AnimationController(
-        vsync: this, duration: const Duration(seconds: 15))
-      ..repeat(reverse: true);
+      vsync: this,
+      duration: const Duration(seconds: 15),
+    )..repeat(reverse: true);
 
     _beginAlignment = TweenSequence<Alignment>([
       TweenSequenceItem(
-          tween: Tween(begin: Alignment.topLeft, end: Alignment.topRight),
-          weight: 1),
+        tween: Tween(begin: Alignment.topLeft, end: Alignment.topRight),
+        weight: 1,
+      ),
       TweenSequenceItem(
-          tween: Tween(begin: Alignment.topRight, end: Alignment.bottomRight),
-          weight: 1),
+        tween: Tween(begin: Alignment.topRight, end: Alignment.bottomRight),
+        weight: 1,
+      ),
       TweenSequenceItem(
-          tween: Tween(begin: Alignment.bottomRight, end: Alignment.bottomLeft),
-          weight: 1),
+        tween: Tween(begin: Alignment.bottomRight, end: Alignment.bottomLeft),
+        weight: 1,
+      ),
       TweenSequenceItem(
-          tween: Tween(begin: Alignment.bottomLeft, end: Alignment.topLeft),
-          weight: 1),
+        tween: Tween(begin: Alignment.bottomLeft, end: Alignment.topLeft),
+        weight: 1,
+      ),
     ]).animate(_controller);
 
     _endAlignment = TweenSequence<Alignment>([
       TweenSequenceItem(
-          tween: Tween(begin: Alignment.bottomRight, end: Alignment.bottomLeft),
-          weight: 1),
+        tween: Tween(begin: Alignment.bottomRight, end: Alignment.bottomLeft),
+        weight: 1,
+      ),
       TweenSequenceItem(
-          tween: Tween(begin: Alignment.bottomLeft, end: Alignment.topLeft),
-          weight: 1),
+        tween: Tween(begin: Alignment.bottomLeft, end: Alignment.topLeft),
+        weight: 1,
+      ),
       TweenSequenceItem(
-          tween: Tween(begin: Alignment.topLeft, end: Alignment.topRight),
-          weight: 1),
+        tween: Tween(begin: Alignment.topLeft, end: Alignment.topRight),
+        weight: 1,
+      ),
       TweenSequenceItem(
-          tween: Tween(begin: Alignment.topRight, end: Alignment.bottomRight),
-          weight: 1),
+        tween: Tween(begin: Alignment.topRight, end: Alignment.bottomRight),
+        weight: 1,
+      ),
     ]).animate(_controller);
   }
 
@@ -67,10 +76,10 @@ class _LiquidBackgroundState extends State<LiquidBackground>
         return Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              colors: [
-                const Color(0xFFF3E5F5), // Light purple pastel
-                const Color(0xFFE1BEE7), // Soft purple
-                const Color(0xFFD1C4E9), // Very light deep purple
+              colors: const [
+                Color(0xFFE8F2F5), // Teal muy pálido (casi blanco azulado)
+                Color(0xFFF6FAFB), // Blanco ligeramente frío
+                Color(0xFFD5E8EE), // Teal claro suave
               ],
               begin: _beginAlignment.value,
               end: _endAlignment.value,

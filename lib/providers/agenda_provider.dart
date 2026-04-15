@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/patient.dart';
 import '../models/appointment.dart';
 import '../models/professional_event.dart';
+import '../models/psychoeducation.dart';
 import '../services/notification_service.dart';
 
 class AgendaProvider extends ChangeNotifier {
@@ -13,6 +14,7 @@ class AgendaProvider extends ChangeNotifier {
   List<Patient> _patients = [];
   List<Appointment> _appointments = [];
   List<ProfessionalEvent> _events = [];
+  List<Psychoeducation> _psychoeducations = [];
   List<String> _reasons = [
     'Abuso sexual',
     'Ansiedad',
@@ -35,9 +37,13 @@ class AgendaProvider extends ChangeNotifier {
     'Otro'
   ];
 
+  bool _isLoading = true;
+  bool get isLoading => _isLoading;
+
   List<Patient> get patients => _patients;
   List<Appointment> get appointments => _appointments;
   List<ProfessionalEvent> get events => _events;
+  List<Psychoeducation> get psychoeducations => _psychoeducations;
   List<String> get reasons => _reasons;
 
   AgendaProvider() {
@@ -45,11 +51,17 @@ class AgendaProvider extends ChangeNotifier {
   }
 
   Future<void> _init() async {
-    // Activa persistencia offline
-    _db.settings = const Settings(persistenceEnabled: true);
+    try {
+      // Activa persistencia offline
+      _db.settings = const Settings(persistenceEnabled: true);
+    } catch (e) {
+      print('Firestore settings already set: $e');
+    }
     
-    await _migrateDataIfNeeded();
+    // Iniciar listeners ANTES de migraciones pesadas
     _initListeners();
+    // Ejecutar migración en segundo plano sin bloquear
+    _migrateDataIfNeeded();
   }
 
   Future<void> _migrateDataIfNeeded() async {
@@ -105,11 +117,21 @@ class AgendaProvider extends ChangeNotifier {
     _db.collection('appointments').snapshots().listen((snapshot) {
       _appointments = snapshot.docs.map((doc) => Appointment.fromJson(doc.data())).toList();
       NotificationService().syncDailySummaries(_appointments);
+      
+      if (_isLoading) {
+        _isLoading = false;
+      }
+      
       notifyListeners();
     });
 
     _db.collection('events').snapshots().listen((snapshot) {
       _events = snapshot.docs.map((doc) => ProfessionalEvent.fromJson(doc.data())).toList();
+      notifyListeners();
+    });
+
+    _db.collection('psychoeducations').snapshots().listen((snapshot) {
+      _psychoeducations = snapshot.docs.map((doc) => Psychoeducation.fromJson(doc.data())).toList();
       notifyListeners();
     });
 
@@ -209,5 +231,19 @@ class AgendaProvider extends ChangeNotifier {
 
   Future<void> deleteEvent(String id) async {
     await _db.collection('events').doc(id).delete();
+  }
+
+  // Métodos de psicoeducación
+  Future<void> addPsychoeducation(Psychoeducation session) async {
+    await _db.collection('psychoeducations').doc(session.id).set(session.toJson());
+  }
+
+  Future<void> deletePsychoeducation(String id) async {
+    await _db.collection('psychoeducations').doc(id).delete();
+  }
+
+  List<Psychoeducation> getPsychoeducationsByPatient(String patientId) {
+    return _psychoeducations.where((s) => s.patientId == patientId).toList()
+      ..sort((a, b) => b.date.compareTo(a.date));
   }
 }
